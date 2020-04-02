@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129083114-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-129083114-2');
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.4"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.5/chartjs-plugin-annotation.js'></script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script
+          src="https://code.jquery.com/jquery-1.12.4.min.js"
+          integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+          crossorigin="anonymous"></script>
+  <script src="countries.js"></script>
+  <script src="plot_data.js"></script>
+
+  <title>COVID-19 Dashboard - Sri Lanka</title>
+  <meta name="description" content="Dashboard for COVID-19 cases in Sri Lanka"/>
+  <meta name="keywords" content="COVID-19, Coronavirus, Sri Lanka">
+
+</head>
+<body>
+
+  <div style="margin:0 auto; width:80%">
+
+    <h2>Simulating the Coronavirus pandemic in Sri Lanka</h2>
+
+    <div class="small" style="color:gray;"><b>Disclaimer</b>: This simulation is for research and public awareness purposes only and is not intended to be a tool for decision-making. There are many uncertainties about the infection and transmission of COVID-19 and there are many limitations to this simple model.</div>
+    <br>
+
+    <div class="clearfix">
+      <div class="column" id="chart_controls" style="width:20%;">
+        <center>
+          <select id="countries">
+          </select>
+          <h3>Chart controls</h3>
+          <div class="control">
+            <input type="checkbox" id="check_log_y" onchange="setLogYAxis(this.checked)">Log-scale y-axis</input>
+          </div>
+
+          <!-- <div class="control">
+            <input type="checkbox" id="check_overlay_italy" onchange="setDataOverlayItaly(this.checked)">Show data from Italy</input>
+          </div>
+          <div class="control">
+            <input type="checkbox" id="check_align_timelines" onchange="alignTimelines(this.checked)">Align timelines</input>
+          </div> -->
+
+          <div class="control">
+            <button type="button" class="small" id="reset_zoom" onclick="resetZoom()">Zoom to fit data</button>
+          </div>
+        </center>
+
+        <br>
+        <hr style="margin-top:10px;">
+
+        <center>
+          <h3>Simulation controls</h3>
+          <div class="control full">
+              <input class="control" type="range" id="slider_finalT" onmousemove="updateParameters()" min=5 max=180 step=1 value=7></input>
+              <br><div class="small" id="slider_finalT_text">Predict for 7 days</div>
+          </div>
+
+          <div class="control full">
+              <input class="control" type="range" id="slider_b1" onmousemove="updateParameters()" min=0 max=1 step=0.01 value=0.6></input>
+              <br><div class="small tooltip">Transmission rate \(\beta_1\) =
+                <span id="slider_b1_value">0.60</span>
+                <span class="tiny tooltiptext">Transmission from mildly infected to susceptible individuals</span>
+              </div>
+          </div>
+
+          <div class="control full">
+              <input class="control" type="range" id="slider_b2" onmousemove="updateParameters()" min=0 max=1 step=0.01 value=0.0></input>
+              <br><div class="small tooltip">Transmission rate \(\beta_2\) =
+                <span id="slider_b2_value">0.00</span>
+                <span class="tiny tooltiptext">Transmission from severely infected to susceptible individuals</span>
+              </div>
+          </div>
+
+          <div class="control full">
+              <input class="control" type="range" id="slider_b3" onmousemove="updateParameters()" min=0 max=1 step=0.01 value=0.0></input>
+              <br><div class="small tooltip">Transmission rate \(\beta_3\) =
+                <span id="slider_b3_value">0.00</span>
+                <span class="tiny tooltiptext">Transmission from critical to susceptible individuals</span>
+              </div>
+          </div>
+
+          <!-- <div class="control">
+              <br>
+              <button type="button" class="small" id="btn_optimize" onclick="optimizeParameters()">Optimize parameters to data</button>
+          </div> -->
+        </center>
+      </div>
+      <div class="column" style="width:80%;">
+        <canvas class="full" id="chart_canvas" ></canvas>
+
+        <div class="control full">
+            <div class="control full">
+              <center>
+                <span id="container_interv0">
+                  <input class="control intervention" type="range" id="slider_interv0_T" onmousemove="updateParameters(true)" min=1 max=30 step=1 value=18></input>
+                  <span><input type="checkbox" id="check_interv0" onchange="updateInterventions(0)" checked></input></span>
+                  <span class="small">Add intervention on day</span>
+                  <span class="small" id="slider_interv0_T_value">18</span>
+                  <span class="small"> to change \(\beta_1\) to </span>
+                  <span id="slider_interv0_b1_value">0.10</span>
+                  <input class="block" type="range" id="slider_interv0_b1" onmousemove="updateParameters()" min=0 max=1 step=0.01 value=0.10></input>
+                </span>
+              </center>
+            </div>
+
+            <div class="control full" style="margin-top:20px;">
+              <center>
+                <span id="container_interv1" style="color:grey">
+                  <input class="control intervention" type="range" id="slider_interv1_T" onmousemove="updateParameters(true)" min=1 max=30 step=1 value=30 disabled=true></input>
+                  <span><input type="checkbox" id="check_interv1" onchange="updateInterventions(1)"></input></span>
+                  <span class="small">Add intervention on day</span>
+                  <span class="small" id="slider_interv1_T_value">30</span>
+                  <span class="small"> to change \(\beta_1\) to </span>
+                  <span id="slider_interv1_b1_value">0.10</span>
+                  <input class="block" type="range" id="slider_interv1_b1" onmousemove="updateParameters()" min=0 max=1 step=0.01 value=0.1 disabled=true></input>
+                </span>
+              </center>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="para">
+      <p>The COVID-19 pandemic has interrupted the day-to-day life of all Sri Lankans. At the time of writing, the entire country is in lockdown. As of now, due to strict interventions, the disease spread seems to have slowed down. However, it is not completely clear what we should expect in the future, especially when interventions change. To shed some light, we have developed an interactive tool to model the spread of COVID-19 in Sri Lanka using a classical SEIR (<b>S</b>usceptible → <b>E</b>xposed → <b>I</b>nfected → <b>R</b>emoved (i.e recovered and fatal) infectious disease model. We also modified the model to account for the Sri Lankan setting.
+      </p>
+    </div>
+
+    <br>
+    <h3>Model description</h3>
+
+    <div class="para">
+
+      <div class="clearfix">
+        <div class="column" style="width:50%;">
+          <p>
+            In our model, the entire population is divided into the following classes:
+            <ul>
+              <li>\(S\) - Susceptible individuals</li>
+              <li>\(E\) - Exposed individuals who have contracted the disease</li>
+              <li>\(I_1\) - Infected individuals with mild symptoms (sub-division is discussed later)</li>
+              <li>\(I_2\) - Infected individuals with severe symptoms (require hospitalization)</li>
+              <li>\(I_3\) - Infected individuals at critical stage (require ICU admission)</li>
+              <li>\(R\) - Recovered individuals (sub-division is discussed later)</li>
+              <li>\(D\) - Fatalities</li>
+            </ul>
+          </p>
+        </div>
+        <div class="column" style="width:50%;">
+          <img src="./model_schematic.png" style="width:100%"></img>
+          <center><figcaption class="tiny" style="margin-top:10px;">Schematic of model classes and rate parameters</figcaption></center>
+        </div>
+      </div>
+
+      <p>
+        Susceptible (\(S\)) individuals contract the disease from infected individuals in classes \(I_1, I_2,\) and \(I_3\). We assume that severe (\(I_2\)) and critical (\(I_3\)) cases do not infect others after hospitalization, due to higher caution and preventive measures in hospitals. Susceptible individuals then move to the exposed class (\(E\)). After an incubation period (~5 days) in \(E\), they move to a mildly symptomatic class (\(I_1\)).
+      </p>
+      <p>
+        According to literature, roughly 81% of the population recover after mild symptoms (in ~6 days) and move on to the recovered class (\(R\)). The remaining 19% in \(I_1\) develop severe symptoms and move to the \(I_2\) class. These severe cases require hospitalization. About three-fourths in \(I_2\) recover after hospitalization (in ~4 days), but the remaining one-fourth develop critical symptoms and require ICU treatment. About 40% of the critical cases are fatal and the rest recover after ICU treatment (in ~10 days). These numbers were derived from the published literature of the COVID-19 spread in China, and were used to calculate the rate parameters, \(a, \gamma_1, \gamma_2, \gamma_3, p_1, p_2,\) and \(\mu\).
+      </p>
+
+      <p>
+        While mild infections do not require hospitalization, according to our friends working at the ground level in Sri Lanka, many mild cases (not all) are also hospitalized. However, a stringent testing criteria is employed and therefore not all potential \(I_1\) cases are tested. Therefore, we further decomposed the \(I_1\) and \(R\) classes to two sub-categories: diagnosed (\(I_{1D}, R_D\)), and undiagnosed or hidden (\(I_{1H}, R_H\)). The parameter \(c\) is the fraction that gets diagnosed and moves to \(I_{1D}\) from \(E\). A hidden \(I_{1H}\) case can either move to the \(I_2\) stage and get diagnosed, or recover and move to a hidden recovered (\(R_H\)) class. These hidden cases are never reported, but at the \(I_{1H}\) stage they still contribute to the spread of the virus.
+      </p>
+      <p>
+        Next, we had a significant number of infected individuals (tested positive) who entered the country from abroad, but were strictly quarantined before they could infect others. We added another sub-category for those quarantined index (coming from abroad) individuals (\(I_{1Q}\)). We assumed that all these cases enter the country at the mildly infected stage \(I_1\), although it is possible that they enter duing the exposed (\(E\)) period as well. When we run the model, we add these cases to the population based on the date they tested positive.
+      </p>
+      <p>
+        Finally, we calibrated the model parameters \(\beta_1\) and \(c\) using the daily diagnosed cases in Sri Lanka. We also used the individuals in the \(I_3\) class and the \(R_D\) class (diagnosed and recovered) to validate the calibration at later dates, when those numbers became available.
+      </p>
+    </div>
+
+    <!-- <center>
+      <img src="./model_schematic.png" style="width:70%"></img>
+      <figcaption style="margin-top:10px;">Schematic of model classes and rate parameters</figcaption>
+    </center> -->
+
+    <br>
+    <h3> Data sources</h3>
+
+    <p class="small">
+      <a href="http://www.epid.gov.lk/web/index.php?option=com_content&view=article&id=225&Itemid=518&lang=en" target="_blank">Situation reports</a> - Epidemiology unit, Ministry of Health, Sri Lanka
+      <br><br>
+      <a href="https://alhill.shinyapps.io/COVID19seir/" target="_blank">COVID-10 modeling app by Allison Hill</a>
+    </p>
+
+    <br>
+    <h3>About</h3>
+
+    <p class="small">
+      This model was developed by <a href="https://wadduwagelab.com/" target="_blank">Dushan Wadduwage</a> (<a href="mailto:wadduwage@fas.harvard.edu">wadduwage@fas.harvard.edu</a>), <a href="https://www.linkedin.com/in/savithru/" target="_blank">Savithru Jayasinghe</a> (<a href="mailto:savithru@mit.edu">savithru@mit.edu</a>), and <a href="https://medicine.yale.edu/profile/suneth_agampodi/" target="_blank">Suneth Agampodi</a> (<a href="mailto:suneth.agampodi@yale.edu">suneth.agampodi@yale.edu</a>).
+      <br><br>
+      The Javascript code behind this web application is available on <a href="https://github.com/savithru-j/COVID-19-SL" target="_blank">Github</a> under an <a href="https://opensource.org/licenses/MIT" target="_blank">MIT license</a>.
+    </p>
+
+  </div>
+
+  <div style="height:30px"></div>
+
+</body>
+</html>
