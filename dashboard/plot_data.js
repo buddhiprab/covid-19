@@ -5,154 +5,21 @@
 'use strict';
 $(function () {
 
-    var date_format = 'DD-MM-YYYY';
-    var date_format1 = 'YYYY-MM-DD';
+    var date_format = 'YYYY-MM-DD';
 
-    /*function getRawDataSriLanka()
-    {
-        //Data array: [in_ward, recovered, deaths, foreign_input_to_quarantine]
-        let data = [];
-        data.push({t: moment('01-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('02-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('03-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('04-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('05-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('06-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('07-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('08-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('09-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('10-03-2020', date_format), y: [0, 1, 0, 0]});
-        data.push({t: moment('11-03-2020', date_format), y: [1, 1, 0, 0]});
-        data.push({t: moment('12-03-2020', date_format), y: [2, 1, 0, 0]});
-        data.push({t: moment('13-03-2020', date_format), y: [5, 1, 0, 2]});
-        data.push({t: moment('14-03-2020', date_format), y: [10, 1, 0, 2]});
-        data.push({t: moment('15-03-2020', date_format), y: [18, 1, 0, 7]});
-        data.push({t: moment('16-03-2020', date_format), y: [28, 1, 0, 6]});
-        data.push({t: moment('17-03-2020', date_format), y: [41, 1, 0, 4]});
-        data.push({t: moment('18-03-2020', date_format), y: [52, 1, 0, 1]});
-        data.push({t: moment('19-03-2020', date_format), y: [65, 1, 0, 2]});
-        data.push({t: moment('20-03-2020', date_format), y: [71, 1, 0, 3]});
-        data.push({t: moment('21-03-2020', date_format), y: [77, 1, 0, 6]});
-        data.push({t: moment('22-03-2020', date_format), y: [86, 1, 0, 0]});
-        data.push({t: moment('23-03-2020', date_format), y: [95, 2, 0, 0]});
-        data.push({t: moment('24-03-2020', date_format), y: [99, 3, 0, 0]});
-        data.push({t: moment('25-03-2020', date_format), y: [99, 3, 0, 0]});
-        data.push({t: moment('26-03-2020', date_format), y: [99, 7, 0, 0]});
-        data.push({t: moment('27-03-2020', date_format), y: [97, 9, 0, 0]});
-        data.push({t: moment('28-03-2020', date_format), y: [103, 9, 1, 0]});
-        data.push({t: moment('29-03-2020', date_format), y: [105, 11, 1, 0]});
-        data.push({t: moment('30-03-2020', date_format), y: [106, 14, 2, 0]});
-        data.push({t: moment('31-03-2020', date_format), y: [124, 17, 2, 0]});
-        return data;
-    }*/
-
-    /*function getDataItaly()
-    {
-        let data = [];
-        data.push({t: moment('31-01-2020', date_format), y: 2});
-        data.push({t: moment('06-02-2020', date_format), y: 3});
-        data.push({t: moment('21-02-2020', date_format), y: 20});
-        data.push({t: moment('22-02-2020', date_format), y: 79});
-        data.push({t: moment('23-02-2020', date_format), y: 150});
-        data.push({t: moment('24-02-2020', date_format), y: 227});
-        data.push({t: moment('25-02-2020', date_format), y: 320});
-        data.push({t: moment('26-02-2020', date_format), y: 445});
-        data.push({t: moment('27-02-2020', date_format), y: 650});
-        data.push({t: moment('28-02-2020', date_format), y: 888});
-        data.push({t: moment('29-02-2020', date_format), y: 1128});
-        data.push({t: moment('01-03-2020', date_format), y: 1694});
-        data.push({t: moment('02-03-2020', date_format), y: 2036});
-        data.push({t: moment('03-03-2020', date_format), y: 2502});
-        data.push({t: moment('04-03-2020', date_format), y: 3089});
-        data.push({t: moment('05-03-2020', date_format), y: 3858});
-        data.push({t: moment('06-03-2020', date_format), y: 4636});
-        data.push({t: moment('07-03-2020', date_format), y: 5883});
-        data.push({t: moment('08-03-2020', date_format), y: 7375});
-        data.push({t: moment('09-03-2020', date_format), y: 9172});
-        data.push({t: moment('10-03-2020', date_format), y: 10149});
-        data.push({t: moment('11-03-2020', date_format), y: 12462});
-        data.push({t: moment('12-03-2020', date_format), y: 15113});
-        data.push({t: moment('13-03-2020', date_format), y: 17660});
-        data.push({t: moment('14-03-2020', date_format), y: 21157});
-        data.push({t: moment('15-03-2020', date_format), y: 24747});
-        data.push({t: moment('16-03-2020', date_format), y: 27980});
-        data.push({t: moment('17-03-2020', date_format), y: 31506});
-        data.push({t: moment('18-03-2020', date_format), y: 35713});
-        data.push({t: moment('19-03-2020', date_format), y: 41035});
-        data.push({t: moment('20-03-2020', date_format), y: 47021});
-        data.push({t: moment('21-03-2020', date_format), y: 53578});
-        data.push({t: moment('22-03-2020', date_format), y: 59138});
-        return data;
-    }*/
-
-    // var data_raw_SL = getRawDataSriLanka();
     var data_raw_SL = {};
-    // var data_SL = getDataSriLanka();
     var data_SL = {};
-    // var data_IT = getDataItaly();
     var sim_params = {};
     var data_predicted = {};
-
     var chart = [];
     var chart_config = [];
 
-    /*updateChart();
-
-    let slider_interv0_T = document.getElementById('slider_interv0_T');
-    let slider_interv1_T = document.getElementById('slider_interv1_T');
-    slider_interv0_T.max = sim_params.T_hist + sim_params.T_pred;
-    slider_interv1_T.max = sim_params.T_hist + sim_params.T_pred;
-    slider_interv0_T.value = 18; //slider_interv1_T.max;
-    slider_interv1_T.value = slider_interv0_T.max;
-    document.getElementById('slider_interv0_T_value').innerHTML = slider_interv0_T.value;
-    document.getElementById('slider_interv1_T_value').innerHTML = slider_interv1_T.value;*/
     generateCountryDropDown();
-    draw("Singapore");
+    showChartForCountry("Singapore");
 
-    $("#countries").on('change', function (e) {
-        var valueSelected = this.value;
-        console.log(valueSelected);
-        draw(valueSelected);
-    });
-
-    function getDataFormatted()
-    {
-        let data = [];
-        for (let i = 0; i < data_raw_SL.length; ++i)
-        {
-            let num_confirmed_cases = 0;
-            for (let j = 0; j < 3; ++j)
-                num_confirmed_cases += data_raw_SL[i].y[j];
-            data.push({t: data_raw_SL[i].t, y: num_confirmed_cases});
-        }
-        return data;
-    }
-
-    function selectDropDown(c) {
-        $("#countries").val(c);
-    }
-    function generateCountryDropDown() {
-        var c=[];
-        $.each(countries, function( index, item ) {
-            c.push(index);
-            var o = new Option(index, index);
-            $(o).html(index);
-            $("#countries").append(o);
-        });
-    }
-    //https://github.com/pomber/covid19
-    //https://pomber.github.io/covid19/timeseries.json
-    function getRaw(c){
-        var countryData = countries[c];
-        var d=[];
-        $.each(countryData, function( index, item ) {
-            d.push({t: moment(item.date, date_format1), y: [item.confirmed, item.recovered, item.deaths, 0]})
-        });
-        return d;
-    }
-
-
-    function draw(c) {
+    function showChartForCountry(c) {
+        chart=[];
+        chart_config=[];
         selectDropDown(c);
         data_raw_SL = getRaw(c);
         data_SL=getDataFormatted();
@@ -171,6 +38,48 @@ $(function () {
         document.getElementById('slider_interv1_T_value').innerHTML = slider_interv1_T.value;
     }
 
+    $("#countries").on('change', function (e) {
+        var valueSelected = this.value;
+        console.log(valueSelected);
+        showChartForCountry(valueSelected);
+    });
+
+    function getDataFormatted()
+    {
+        let data = [];
+        for (let i = 0; i < data_raw_SL.length; ++i)
+        {
+            let num_confirmed_cases = 0;
+            for (let j = 0; j < 3; ++j)
+                num_confirmed_cases += data_raw_SL[i].y[j];
+            data.push({t: data_raw_SL[i].t, y: num_confirmed_cases});
+        }
+        return data;
+    }
+
+    function generateCountryDropDown() {
+        $.each(countries, function( index, item ) {
+            var o = new Option(index, index);
+            $(o).html(index);
+            $("#countries").append(o);
+        });
+    }
+
+    function selectDropDown(c) {
+        $("#countries").val(c);
+    }
+
+    //data location
+    //https://github.com/pomber/covid19
+    //https://pomber.github.io/covid19/timeseries.json
+    function getRaw(c){
+        var countryData = countries[c];
+        var d=[];
+        $.each(countryData, function( index, item ) {
+            d.push({t: moment(item.date, date_format), y: [item.confirmed, item.recovered, item.deaths, 0]})
+        });
+        return d;
+    }
 
     function formatNumber(num) {
         return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -178,7 +87,12 @@ $(function () {
 
     function updateChart()
     {
-        let canvas = document.getElementById('chart_canvas');
+        var canvas = document.createElement('canvas');
+        canvas.className="full";
+        $("#canvas_wrapper").html(canvas);
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
         //canvas.width = 0.7*window.innerWidth;
         canvas.height = 0.65*window.innerHeight;
         let ctx = canvas.getContext('2d');
